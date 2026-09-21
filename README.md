@@ -17,8 +17,20 @@ npm run build   # statischer Export, alle Routen vorgerendert
 npm start       # Produktionsserver lokal prüfen
 ```
 
-Für Netlify liegt `netlify.toml` bei (Build `npm run build`, Plugin
-`@netlify/plugin-nextjs`). Auf Vercel genügt das Importieren des Repos.
+### Netlify
+
+`netlify.toml` liegt bei — Repo importieren, sonst nichts einstellen. Netlify
+liest Build-Befehl (`npm run build`), Veröffentlichungsordner (`.next`),
+Node-Version (22) und das Next.js-Plugin aus der Datei. Der Ablauf ist lokal
+mit `netlify build` geprüft und läuft mit Next.js 16 durch.
+
+Falls in der Netlify-Oberfläche noch Werte eines früheren Versuchs stehen:
+Base directory leer lassen, nicht auf `site` setzen — das Projekt liegt in der
+Wurzel dieses Repos.
+
+### Vercel
+
+Repo importieren, keine weitere Einstellung nötig.
 
 ## Technik
 
