@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kfz Krautschick — Webseite
 
-## Getting Started
+Demo-Landingpage für **Reifenservice Andreas Krautschick**, freie Kfz-Werkstatt in
+Neuburg-Joshofen. Gebaut von [svh Consulting](https://svhconsult.de).
 
-First, run the development server:
+## Starten
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Bauen und veröffentlichen
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # statischer Export, alle Routen vorgerendert
+npm start       # Produktionsserver lokal prüfen
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Für Netlify liegt `netlify.toml` bei (Build `npm run build`, Plugin
+`@netlify/plugin-nextjs`). Auf Vercel genügt das Importieren des Repos.
 
-## Learn More
+## Technik
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 16** (App Router) · **React 19** · **TypeScript**
+- **Tailwind CSS v4** — Farbtokens in `src/app/globals.css`, dunkle Abschnitte
+  über die Klasse `.on-dark`, die dieselben Tokens invertiert
+- **Framer Motion** für Reveals, **GSAP ScrollTrigger** für die gepinnte
+  Leistungs-Sektion und Parallax
+- Schriften (Fraunces, Inter) self-hosted über `next/font` — keine Anfragen an
+  Google-Server
+- Karte lädt erst nach Klick, davor keine externen Anfragen
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Aufbau
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+  app/            Routen: Startseite, Impressum, Datenschutz, sitemap, robots
+  components/     Header, Footer, Hero, Logo, Leistungen, FAQ, Formular, Motion
+  lib/            site.ts (Stammdaten), services.ts (Leistungen)
+public/images/    Bildmaterial
+```
 
-## Deploy on Vercel
+Stammdaten wie Anschrift, Telefonnummern und Koordinaten stehen **nur** in
+`src/lib/site.ts`. Kontaktblock, Footer, Karte und die strukturierten Daten
+(JSON-LD) leiten sich von dort ab.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stand
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Demo für das Erstgespräch. **Die Fotos sind Platzhalter** und zeigen nicht den
+echten Betrieb. Angaben, die auf der bisherigen Webseite nicht belegt waren —
+Öffnungszeiten, Preise, Jahreszahlen — stehen bewusst nicht auf der Seite,
+sondern als sichtbare Platzhalter.
+
+Das Kontaktformular hat kein Backend: Es prüft die Eingaben und öffnet dann eine
+vorbereitete E-Mail. Für echten Serverversand siehe den Hinweis in
+`src/components/contact-form.tsx`.

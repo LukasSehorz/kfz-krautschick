@@ -1,0 +1,24 @@
+# Netlify-Konfiguration für die Kfz-Krautschick-Seite.
+# Das Next.js-Projekt liegt im Unterordner "site".
+
+[build]
+  base = "site"
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Das offizielle Next.js-Plugin übernimmt Routing, Bildoptimierung und Caching.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Sicherheits-Header. Die Seite lädt ausser der OpenStreetMap-Karte nichts von
+# fremden Domains, daher kann die Policy eng bleiben.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"

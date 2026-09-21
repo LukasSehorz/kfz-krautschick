@@ -1,26 +1,190 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  KFZ Krautschick — Designsystem
+  Werkstatt-Materialien: Öl-Schwarz, Graphit, Beton, ein sparsamer Bernstein-Akzent.
+  Typografische Ruhe nach Vorbild der Brandhuber-Seite: Serif-Headlines in 400,
+  weite Versalien-Eyebrows, dünne Linien statt Schatten, kleine Radien.
+*/
 
 @theme inline {
+  /* Zusätzlicher Breakpoint für sehr schmale Geräte (iPhone SE & Co.) */
+  --breakpoint-xs: 23.5rem;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-graphite: var(--graphite);
+  --color-concrete: var(--concrete);
+  --color-concrete-deep: var(--concrete-deep);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-amber: var(--amber);
+  --color-amber-deep: var(--amber-deep);
+  --color-amber-bright: var(--amber-bright);
+
+  --font-serif: var(--font-display), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-body), system-ui, -apple-system, sans-serif;
+
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  color-scheme: light;
+
+  /* Helle Basis: heller Beton */
+  --background: #f4f3f1;
+  --foreground: #16171a;
+
+  --ink: #16171a; /* Öl-Schwarz */
+  --ink-soft: #24262a; /* Graphit-Schwarz */
+  --graphite: #2f3237; /* Anthrazit */
+  --concrete: #e8e6e2; /* heller Beton */
+  --concrete-deep: #dcd9d4; /* Beton, eine Stufe tiefer */
+  --line: #d3d0cb; /* dünne Trennlinie auf hell */
+  --muted: #62646a; /* gedämpfter Fließtext */
+  /* Signal-Bernstein, sparsam eingesetzt.
+     --amber ist der TEXT-Ton: dunkel genug für WCAG AA (4.5:1) auf --background
+     (5.2:1) und auf --concrete (4.6:1). Für große Farbflächen wie den Hero-CTA
+     gibt es --amber-bright, das dort als Hintergrund unter dunkler Schrift steht. */
+  --amber: #9c5309;
+  --amber-deep: #7d4207;
+  --amber-bright: #c06a13;
+}
+
+/*
+  Dunkle Flächen: die gleichen Tokens, aber invertiert belegt.
+  So funktionieren alle Utilities (text-muted, border-line, text-amber)
+  auch innerhalb dunkler Sektionen ohne Sonderklassen.
+*/
+.on-dark {
+  --background: #16171a;
+  --foreground: #f4f3f1;
+  --concrete: #24262a;
+  --concrete-deep: #1c1e21;
+  --line: #3a3d43;
+  --muted: #a3a5ab;
+  --amber: #e69a4a;
+  --amber-deep: #c06a13;
+  --amber-bright: #e69a4a;
+
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Sticky-Header nicht über Anker-Ziele legen */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Kein horizontales Überlaufen auf schmalen Geräten */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Sichtbarer Fokus überall, aber nur bei Tastaturbedienung */
+  :focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  ::selection {
+    background: var(--amber);
+    color: #fff;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  /* 16px Seitenrand auf sehr schmalen Geräten, ab 380px die vollen 24px */
+  padding-inline: 1rem;
+  max-width: 78rem;
+}
+
+@media (min-width: 23.75rem) {
+  .container-page {
+    padding-inline: 1.5rem;
+  }
+}
+
+@utility eyebrow {
+  display: block;
+  font-size: 0.6875rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: var(--amber);
+}
+
+/* Dezenter Unterstrich, der von rechts nach links verschwindet und links wieder aufbaut */
+@utility link-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.35em;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Feine Rasterlinien — erinnert an Werkstattboden / technische Zeichnung */
+@utility hairline-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 5rem 5rem;
+  opacity: 0.4;
 }
